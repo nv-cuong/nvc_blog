@@ -131,7 +131,7 @@ class CategoryController extends Controller
             }
 
             if (Storage::disk('public')->exists('category/'.$category->image)) {
-                Storage::disk('public')->delete('category/'.$category->name);
+                Storage::disk('public')->delete('category/'.$category->image);
             }
 
             $category_image = Image::make($image)->resize(1600, 479)->stream();
@@ -143,7 +143,7 @@ class CategoryController extends Controller
             }
 
             if (Storage::disk('public')->exists('category/slider/'.$category->image)) {
-                Storage::disk('public')->delete('category/slider/'.$category->name);
+                Storage::disk('public')->delete('category/slider/'.$category->image);
             }
 
             $slider = Image::make($image)->resize(500, 333)->stream();
