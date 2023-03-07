@@ -133,6 +133,7 @@ select.selectpicker {
 }
 .bootstrap-select.btn-group .dropdown-menu li {
   position: relative;
+  margin-left: 20px;
 }
 .bootstrap-select.btn-group .dropdown-menu li.active small {
   color: #fff;

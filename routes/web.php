@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Author\DashboardController as AuthorDashboardController;
 use Illuminate\Support\Facades\Auth;
@@ -26,8 +27,10 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin',
-    'middleware' => ['auth', 'admin'], 'as' => 'admin.'], function () {
+Route::group([
+    'prefix' => 'admin', 'namespace' => 'Admin',
+    'middleware' => ['auth', 'admin'], 'as' => 'admin.'
+], function () {
 
     Route::get('dashboard', [AdminDashboardController::class, 'index'])
         ->name('dashboard');
@@ -64,6 +67,25 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin',
             ->name('show');
         Route::delete('/delete/{id}', [CategoryController::class, 'delete'])
             ->name('delete');
+    });
+
+    Route::prefix('/post')->name('post.')->group(function () {
+        Route::get('/', [PostController::class, 'index'])
+            ->name('index');
+        Route::get('/create', [PostController::class, 'create'])
+            ->name('create');
+        Route::post('/store', [PostController::class, 'store'])
+            ->name('store');
+        Route::get('/edit/{id}', [PostController::class, 'edit'])
+            ->name('edit');
+        Route::put('/update/{id}', [PostController::class, 'update'])
+            ->name('update');
+        Route::get('/show/{id}', [PostController::class, 'show'])
+            ->name('show');
+        Route::delete('/delete/{id}', [PostController::class, 'delete'])
+            ->name('delete');
+        Route::delete('/approve/{id}', [PostController::class, 'approve'])
+            ->name('approve');
     });
 });
 

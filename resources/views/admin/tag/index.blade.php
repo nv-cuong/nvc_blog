@@ -31,9 +31,10 @@
                             <table class="table table-bordered table-striped table-hover dataTable js-exportable">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>No.</th>
                                         <th>Name</th>
                                         <th>Slug</th>
+                                        <th>Post Count</th>
                                         <th>Created At</th>
                                         <th>Updated At</th>
                                         <th>Action</th>
@@ -41,9 +42,10 @@
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>No.</th>
                                         <th>Name</th>
                                         <th>Slug</th>
+                                        <th>Post Count</th>
                                         <th>Created At</th>
                                         <th>Updated At</th>
                                         <th>Action</th>
@@ -55,6 +57,7 @@
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $tag->name }}</td>
                                             <td>{{ $tag->slug }}</td>
+                                            <td><span class="badge bg-orange">{{ $tag->posts->count() }}</span></td>
                                             <td>{{ $tag->created_at }}</td>
                                             <td>{{ $tag->updated_at }}</td>
                                             <td class="text-center">
