@@ -3,9 +3,11 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\SubscriberController as AdminSubscriberController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Author\DashboardController as AuthorDashboardController;
 use App\Http\Controllers\Author\PostController as AuthorPostController;
+use App\Http\Controllers\SubscriberController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +27,9 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+Route::post('subscriber', [SubscriberController::class, 'subscriber'])
+    ->name('subscriber');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -89,6 +94,13 @@ Route::group([
             ->name('approve');
         Route::get('/pending', [AdminPostController::class, 'pending'])
             ->name('pending');
+    });
+
+    Route::prefix('/subscriber')->name('subscriber.')->group(function () {
+        Route::get('/', [AdminSubscriberController::class, 'index'])
+            ->name('index');
+        Route::delete('/delete/{id}', [AdminSubscriberController::class, 'delete'])
+            ->name('delete');
     });
 });
 
