@@ -13,7 +13,7 @@
             <button type="button" class="btn btn-success waves-effect pull-right" onclick="approvePost({{ $post->id }})">
                 <i class="material-icons">done</i>
                 <span>Approve</span>
-                <form method="post" action="{{ route('admin.post.approve', $post->id) }}" id="approval-form"
+                <form method="post" action="{{ route('author.post.approve', $post->id) }}" id="approval-form"
                     style="display: none">
                     @csrf
                     @method('PUT')
@@ -114,7 +114,7 @@
         function approvePost(id) {
             swal({
                 title: 'Are you sure?',
-                text: "You went to approve this post!",
+                text: "You went to approve this post ",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
