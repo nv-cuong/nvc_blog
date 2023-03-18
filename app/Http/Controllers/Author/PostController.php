@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Author;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -23,8 +23,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->get();
-        return view('admin.post.index', compact('posts'));
+        $posts = Auth::User()->posts()->latest()->get();
+        return view('author.post.index', compact('posts'));
     }
 
     /**
@@ -34,9 +34,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        $categories = Category::get();
-        $tags = Tag::get();
-        return view('admin.post.create', compact(['categories', 'tags']));
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('author.post.create', compact(['categories', 'tags']));
     }
 
     /**
@@ -87,7 +87,7 @@ class PostController extends Controller
         $post->tags()->attach($request->tags);
 
         Toastr::success('Post Successfully created!', 'Success');
-        return redirect()->route('admin.post.index');
+        return redirect()->route('author.post.index');
     }
 
     /**
@@ -99,7 +99,11 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::find($id);
-        return view('admin.post.show', compact('post'));
+        if($post->user_id != Auth::id()){
+            Toastr::error('You are not authorized to access this post', 'Error');
+            return redirect()->route('author.post.index');
+        }
+        return view('author.post.show', compact('post'));
     }
 
     /**
@@ -111,9 +115,13 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
-        $categories = Category::get();
-        $tags = Tag::get();
-        return view('admin.post.edit', compact(['post', 'categories', 'tags']));
+        if($post->user_id != Auth::id()){
+            Toastr::error('You are not authorized to access this post', 'Error');
+            return redirect()->route('author.post.index');
+        }
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('author.post.edit', compact(['post', 'categories', 'tags']));
     }
 
     /**
@@ -126,6 +134,10 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         $post = Post::find($id);
+        if($post->user_id != Auth::id()){
+            Toastr::error('You are not authorized to access this post', 'Error');
+            return redirect()->route('author.post.index');
+        }
         $this->validate($request, [
             'title' => 'required',
             'image' => 'image',
@@ -170,7 +182,7 @@ class PostController extends Controller
         $post->tags()->sync($request->tags);
 
         Toastr::success('Post successfully updated!', 'Success');
-        return redirect()->route('admin.post.index');
+        return redirect()->route('author.post.index');
     }
 
     /**
@@ -182,6 +194,10 @@ class PostController extends Controller
     public function delete($id)
     {
         $post = Post::find($id);
+        if($post->user_id != Auth::id()){
+            Toastr::error('You are not authorized to access this post', 'Error');
+            return redirect()->route('author.post.index');
+        }
         if ($post) {
             if (Storage::disk('public')->exists('post/' . $post->image)) {
                 Storage::disk('public')->delete('post/' . $post->image);
@@ -189,27 +205,8 @@ class PostController extends Controller
             $post->categories()->detach();
             $post->tags()->detach();
             $post->delete();
-            Toastr::success('Post Successfully Deleted :)', 'Success');
+            Toastr::success('Post successfully deleted :)', 'Success');
             return redirect()->back();
         }
-    }
-
-    public function pending()
-    {
-        $posts = Post::where('approve', 0)->get();
-        return view('admin.post.pending', compact('posts'));
-    }
-
-    public function approval($id)
-    {
-        $post = Post::find($id);
-        if ($post->approve == 0) {
-            $post->approve = true;
-            $post->save();
-            Toastr::success('Post successfully approved!', 'Success');
-        } else {
-            Toastr::info('This post is already approved.', 'Info');
-        }
-        return redirect()->back();
     }
 }

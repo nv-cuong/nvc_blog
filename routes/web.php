@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Author\DashboardController as AuthorDashboardController;
+use App\Http\Controllers\Author\PostController as AuthorPostController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -70,28 +71,49 @@ Route::group([
     });
 
     Route::prefix('/post')->name('post.')->group(function () {
-        Route::get('/', [PostController::class, 'index'])
+        Route::get('/', [AdminPostController::class, 'index'])
             ->name('index');
-        Route::get('/create', [PostController::class, 'create'])
+        Route::get('/create', [AdminPostController::class, 'create'])
             ->name('create');
-        Route::post('/store', [PostController::class, 'store'])
+        Route::post('/store', [AdminPostController::class, 'store'])
             ->name('store');
-        Route::get('/edit/{id}', [PostController::class, 'edit'])
+        Route::get('/edit/{id}', [AdminPostController::class, 'edit'])
             ->name('edit');
-        Route::put('/update/{id}', [PostController::class, 'update'])
+        Route::put('/update/{id}', [AdminPostController::class, 'update'])
             ->name('update');
-        Route::get('/show/{id}', [PostController::class, 'show'])
+        Route::get('/show/{id}', [AdminPostController::class, 'show'])
             ->name('show');
-        Route::delete('/delete/{id}', [PostController::class, 'delete'])
+        Route::delete('/delete/{id}', [AdminPostController::class, 'delete'])
             ->name('delete');
-        Route::delete('/approve/{id}', [PostController::class, 'approve'])
+        Route::put('/approve/{id}', [AdminPostController::class, 'approval'])
             ->name('approve');
+        Route::get('/pending', [AdminPostController::class, 'pending'])
+            ->name('pending');
     });
 });
 
 Route::group([
-    'prefix' => 'author', 'namespace' => 'author',
+    'prefix' => 'author', 'namespace' => 'Author',
     'middleware' => ['auth', 'author'], 'as' => 'author.'
 ], function () {
     Route::get('dashboard', [AuthorDashboardController::class, 'index'])->name('dashboard');
+
+    Route::prefix('/post')->name('post.')->group(function () {
+        Route::get('/', [AuthorPostController::class, 'index'])
+            ->name('index');
+        Route::get('/create', [AuthorPostController::class, 'create'])
+            ->name('create');
+        Route::post('/store', [AuthorPostController::class, 'store'])
+            ->name('store');
+        Route::get('/edit/{id}', [AuthorPostController::class, 'edit'])
+            ->name('edit');
+        Route::put('/update/{id}', [AuthorPostController::class, 'update'])
+            ->name('update');
+        Route::get('/show/{id}', [AuthorPostController::class, 'show'])
+            ->name('show');
+        Route::delete('/delete/{id}', [AuthorPostController::class, 'delete'])
+            ->name('delete');
+        Route::delete('/approve/{id}', [AuthorPostController::class, 'approve'])
+            ->name('approve');
+    });
 });
