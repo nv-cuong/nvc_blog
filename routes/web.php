@@ -3,10 +3,12 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\SubscriberController as AdminSubscriberController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Author\DashboardController as AuthorDashboardController;
 use App\Http\Controllers\Author\PostController as AuthorPostController;
+use App\Http\Controllers\Author\SettingsController as AuthorSettingsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SubscriberController;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +41,13 @@ Route::group([
 
     Route::get('dashboard', [AdminDashboardController::class, 'index'])
         ->name('dashboard');
+
+    Route::get('settings', [AdminSettingsController::class, 'index'])
+        ->name('settings');
+    Route::put('profile-update', [AdminSettingsController::class, 'updateProfile'])
+        ->name('profile.update');
+    Route::put('password-update', [AdminSettingsController::class, 'updatePassword'])
+        ->name('password.update');
 
     Route::prefix('/tag')->name('tag.')->group(function () {
         Route::get('/', [TagController::class, 'index'])
@@ -107,7 +116,14 @@ Route::group([
     'prefix' => 'author', 'namespace' => 'Author',
     'middleware' => ['auth', 'author'], 'as' => 'author.'
 ], function () {
-    Route::get('dashboard', [AuthorDashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [AuthorDashboardController::class, 'index'])
+        ->name('dashboard');
+    Route::get('settings', [AuthorSettingsController::class, 'index'])
+        ->name('settings');
+    Route::put('profile-update', [AuthorSettingsController::class, 'updateProfile'])
+        ->name('profile.update');
+    Route::put('password-update', [AuthorSettingsController::class, 'updatePassword'])
+        ->name('password.update');
 
     Route::prefix('/post')->name('post.')->group(function () {
         Route::get('/', [AuthorPostController::class, 'index'])

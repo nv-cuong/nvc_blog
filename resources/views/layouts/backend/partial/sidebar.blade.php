@@ -12,17 +12,16 @@
                 <i class="material-icons" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="true">keyboard_arrow_down</i>
                 <ul class="dropdown-menu pull-right">
-                    <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="javascript:void(0);"><i class="material-icons">group</i>Followers</a></li>
-                    <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Sales</a></li>
-                    <li><a href="javascript:void(0);"><i class="material-icons">favorite</i>Likes</a></li>
+                    <li>
+                        <a href="{{ Auth::user()->role->id == 1 ? route('admin.settings') : route('author.settings')}}"><i class="material-icons">settings</i>Cài đặt</a>
+                    </li>
+
                     <li role="separator" class="divider"></li>
                     <li>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">
-                            <i class="material-icons">input</i>Sign Out
+                            <i class="material-icons">input</i>Đăng xuất
                         </a>
 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -37,7 +36,7 @@
     <!-- Menu -->
     <div class="menu">
         <ul class="list">
-            <li class="header">MAIN NAVIGATION</li>
+            <li class="header">CHỨC NĂNG</li>
 
             @if (Request::is('admin*'))
                 <li class="{{ Request::is('admin/dashboard*') ? 'active' : '' }}">
@@ -55,34 +54,41 @@
                 <li class="{{ Request::is('admin/category*') ? 'active' : '' }}">
                     <a href="{{ route('admin.category.index') }}">
                         <i class="material-icons">apps</i>
-                        <span>Category</span>
+                        <span>Danh mục</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/post*') ? 'active' : '' }}">
                     <a href="{{ route('admin.post.index') }}">
                         <i class="material-icons">library_books</i>
-                        <span>Posts</span>
+                        <span>Bài viết</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/post/pending') ? 'active' : '' }}">
                     <a href="{{ route('admin.post.pending') }}">
                         <i class="material-icons">library_books</i>
-                        <span>Pending Post</span>
+                        <span>Bài viết chờ xử lý</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/subscriber*') ? 'active' : '' }}">
                     <a href="{{ route('admin.subscriber.index') }}">
                         <i class="material-icons">subscriptions</i>
-                        <span>Subscribers</span>
+                        <span>Quản lý người dùng</span>
                     </a>
                 </li>
-                <li class="header">System</li>
+
+                <li class="header">HỆ THỐNG</li>
+                <li class="{{ Request::is('admin/settings') ? 'active' : '' }}">
+                    <a href="{{ route('admin.settings') }}">
+                        <i class="material-icons">settings</i>
+                        <span>Cài đặt</span>
+                    </a>
+                </li>
                 <li>
                     <a class="dropdown-item" href="{{ route('logout') }}"
                         onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">
                         <i class="material-icons">input</i>
-                        <span>Sign Out</span> 
+                        <span>Đăng xuất</span> 
                     </a>
 
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -101,16 +107,23 @@
             <li class="{{ Request::is('author/post*') ? 'active' : '' }}">
                 <a href="{{ route('author.post.index') }}">
                     <i class="material-icons">library_books</i>
-                    <span>Posts</span>
+                    <span>Bài viết</span>
                 </a>
             </li>
-            <li class="header">System</li>
+
+            <li class="header">HỆ THỐNG</li>
+            <li class="{{ Request::is('author/settings') ? 'active' : '' }}">
+                <a href="{{ route('author.settings') }}">
+                    <i class="material-icons">settings</i>
+                    <span>Cài đặt</span>
+                </a>
+            </li>
             <li>
                 <a class="dropdown-item" href="{{ route('logout') }}"
                     onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();">
                     <i class="material-icons">input</i>
-                    <span>Sign Out</span> 
+                    <span>Đăng xuất</span> 
                 </a>
 
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -125,7 +138,7 @@
     <!-- Footer -->
     <div class="legal">
         <div class="copyright">
-            &copy; 2016 - 2017 <a href="javascript:void(0);">AdminBSB - Material Design</a>.
+            &copy; 2022 - 2023 <a href="javascript:void(0);">Admin - Blog</a>.
         </div>
         <div class="version">
             <b>Version: </b> 1.0.5
