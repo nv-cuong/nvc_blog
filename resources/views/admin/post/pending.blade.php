@@ -82,7 +82,7 @@
                                                 @if ($post->approved == false)
                                                     <button type="button" class="btn btn-success waves-effect" onclick="approvePost({{ $post->id }})" title="Approved">
                                                         <i class="material-icons">done</i>
-                                                        <form method="post" action="{{ route('admin.post.approve', $post->id) }}" id="approval-form"
+                                                        <form method="post" action="{{ route('admin.post.approve', $post->id) }}" id="approval-form-{{ $post->id }}"
                                                             style="display: none">
                                                             @csrf
                                                             @method('PUT')
@@ -148,12 +148,12 @@
             })
 
             swalWithBootstrapButtons.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'Bạn có chắc chắn muốn xóa?',
+                text: "Bạn không thể hoàn tác lại thao tác này!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Có, xóa bài viết!',
+                cancelButtonText: 'Quay lại!',
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -164,9 +164,39 @@
                     result.dismiss === Swal.DismissReason.cancel
                 ) {
                     swalWithBootstrapButtons.fire(
-                        'Cancelled',
-                        'Your data is safe :)',
+                        'Quay lại',
+                        'Thao tác an toàn :)',
                         'error'
+                    )
+                }
+            })
+        }
+        function approvePost(id) {
+            swal({
+                title: 'Bạn có chắc chắn?',
+                text: "Bạn có muốn phê duyệt bài viết",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Có, phê duyệt!',
+                cancelButtonText: 'Quay lại!',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+                    event.preventDefault();
+                    document.getElementById('approval-form-'+ id).submit();
+                } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === swal.DismissReason.cancel
+                ) {
+                    swal(
+                        'Quay lại',
+                        'Bài viết vẫn đăng chờ xử lý :)',
+                        'info'
                     )
                 }
             })

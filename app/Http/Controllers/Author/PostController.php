@@ -5,11 +5,16 @@ namespace App\Http\Controllers\Author;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Subscriber;
 use App\Models\Tag;
+use App\Models\User;
+use App\Notifications\NewAuthorPost;
+use App\Notifications\NewPostNotify;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -85,6 +90,8 @@ class PostController extends Controller
 
         $post->categories()->attach($request->categories);
         $post->tags()->attach($request->tags);
+        $users = User::where('role_id', '1')->get();
+        Notification::send($users, new NewAuthorPost($post));
 
         Toastr::success('Post Successfully created!', 'Success');
         return redirect()->route('author.post.index');
@@ -180,6 +187,13 @@ class PostController extends Controller
 
         $post->categories()->sync($request->categories);
         $post->tags()->sync($request->tags);
+
+        $subscribers = Subscriber::all();
+        foreach ($subscribers as $subscriber)
+        {
+            Notification::route('mail',$subscriber->email)
+                ->notify(new NewPostNotify($post));
+        }
 
         Toastr::success('Post successfully updated!', 'Success');
         return redirect()->route('author.post.index');

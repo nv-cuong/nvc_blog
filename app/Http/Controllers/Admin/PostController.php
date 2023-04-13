@@ -5,11 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Subscriber;
 use App\Models\Tag;
+use App\Notifications\AuthorPostApproved;
+use App\Notifications\NewPostNotify;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -85,7 +89,8 @@ class PostController extends Controller
 
         $post->categories()->attach($request->categories);
         $post->tags()->attach($request->tags);
-
+        $subscribers = Subscriber::all();
+        
         Toastr::success('Post Successfully created!', 'Success');
         return redirect()->route('admin.post.index');
     }
@@ -196,16 +201,25 @@ class PostController extends Controller
 
     public function pending()
     {
-        $posts = Post::where('approve', 0)->get();
+        $posts = Post::where('approve', false)->get();
         return view('admin.post.pending', compact('posts'));
     }
 
     public function approval($id)
     {
         $post = Post::find($id);
-        if ($post->approve == 0) {
+        if ($post->approve == false) {
             $post->approve = true;
             $post->save();
+            $post->user->notify(new AuthorPostApproved($post));
+
+            $subscribers = Subscriber::all();
+            foreach ($subscribers as $subscriber)
+            {
+                Notification::route('mail',$subscriber->email)
+                    ->notify(new NewPostNotify($post));
+            }
+
             Toastr::success('Post successfully approved!', 'Success');
         } else {
             Toastr::info('This post is already approved.', 'Info');
