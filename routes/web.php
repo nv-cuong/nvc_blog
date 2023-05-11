@@ -2,14 +2,18 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\FavoriteController as AdminFavoriteController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\SubscriberController as AdminSubscriberController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Author\DashboardController as AuthorDashboardController;
+use App\Http\Controllers\Author\FavoriteController as AuthorFavoriteController;
 use App\Http\Controllers\Author\PostController as AuthorPostController;
 use App\Http\Controllers\Author\SettingsController as AuthorSettingsController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\SubscriberController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +31,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
 
+Route::get('post/{slug}', [PostController::class,'details'])->name('post.details');
+
 Auth::routes();
+
+Route::group(['middleware'=>['auth']], function (){
+    Route::post('favorite/{post}/add', [FavoriteController::class, 'add'])->name('post.favorite');
+    // Route::post('comment/{post}', [CommentController::class, 'store'])->name('comment.store');
+ });
 
 Route::post('subscriber', [SubscriberController::class, 'subscriber'])
     ->name('subscriber');
@@ -48,6 +59,8 @@ Route::group([
         ->name('profile.update');
     Route::put('password-update', [AdminSettingsController::class, 'updatePassword'])
         ->name('password.update');
+
+    Route::get('/favorite', [AdminFavoriteController::class,'index'])->name('favorite.index');
 
     Route::prefix('/tag')->name('tag.')->group(function () {
         Route::get('/', [TagController::class, 'index'])
@@ -124,6 +137,9 @@ Route::group([
         ->name('profile.update');
     Route::put('password-update', [AuthorSettingsController::class, 'updatePassword'])
         ->name('password.update');
+
+    Route::get('/favorite', [AuthorFavoriteController::class,'index'])->name('favorite.index');
+    
 
     Route::prefix('/post')->name('post.')->group(function () {
         Route::get('/', [AuthorPostController::class, 'index'])

@@ -75,6 +75,12 @@
                         <span>Quản lý người dùng</span>
                     </a>
                 </li>
+                <li class="{{ Request::is('admin/favorite') ? 'active' : '' }}">
+                    <a href="{{ route('admin.favorite.index') }}">
+                        <i class="material-icons">favorite</i>
+                        <span>Favorite Posts</span>
+                    </a>
+                </li>
 
                 <li class="header">HỆ THỐNG</li>
                 <li class="{{ Request::is('admin/settings') ? 'active' : '' }}">
@@ -108,6 +114,12 @@
                 <a href="{{ route('author.post.index') }}">
                     <i class="material-icons">library_books</i>
                     <span>Bài viết</span>
+                </a>
+            </li>
+            <li class="{{ Request::is('author/favorite') ? 'active' : '' }}">
+                <a href="{{ route('author.favorite.index') }}">
+                    <i class="material-icons">favorite</i>
+                    <span>Favorite Posts</span>
                 </a>
             </li>
 
