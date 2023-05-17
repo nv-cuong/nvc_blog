@@ -50,6 +50,8 @@ Route::group(['middleware'=>['auth']], function (){
 Route::post('subscriber', [SubscriberController::class, 'subscriber'])
     ->name('subscriber');
 
+Route::get('/search','SearchController@search')->name('search');
+
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::group([
