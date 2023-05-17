@@ -30,9 +30,9 @@
                 <div class="footer-section">
                     <h4 class="title"><b>CATAGORIES</b></h4>
                     <ul>
-                        {{-- @foreach ($categories as $category)
+                        @foreach ($categories as $category)
                             <li><a href="{{ route('category.posts',$category->slug) }}">{{ $category->name }}</a></li>
-                        @endforeach --}}
+                        @endforeach
                     </ul>
                 </div>
             </div>

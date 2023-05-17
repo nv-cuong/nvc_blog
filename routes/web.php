@@ -16,8 +16,10 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SubscriberController;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +34,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
 
+Route::get('posts',[PostController::class, 'index'])->name('post.index');
 Route::get('post/{slug}', [PostController::class,'details'])->name('post.details');
+
+Route::get('/category/{slug}',[PostController::class, 'postByCategory'])->name('category.posts');
+Route::get('/tag/{slug}',[PostController::class, 'postByTag'])->name('tag.posts');
 
 Auth::routes();
 
@@ -165,4 +171,9 @@ Route::group([
         Route::delete('/approve/{id}', [AuthorPostController::class, 'approve'])
             ->name('approve');
     });
+});
+
+View::composer('layouts.frontend.partial.footer',function ($view) {
+    $categories = Category::all();
+    $view->with('categories',$categories);
 });
