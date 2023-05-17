@@ -96,8 +96,7 @@
 
                                         </li>
                                         <li>
-                                            <a href="#"><i
-                                                    class="ion-chatbubble"></i>{{ $post->comments->count() }}</a>
+                                            <a href="#"><i class="ion-chatbubble"></i>{{ $post->comments->count() }}</a>
                                         </li>
                                         <li>
                                             <a href="#"><i class="ion-eye"></i>{{ $post->view_count }}</a>

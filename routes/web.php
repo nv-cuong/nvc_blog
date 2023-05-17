@@ -11,6 +11,7 @@ use App\Http\Controllers\Author\DashboardController as AuthorDashboardController
 use App\Http\Controllers\Author\FavoriteController as AuthorFavoriteController;
 use App\Http\Controllers\Author\PostController as AuthorPostController;
 use App\Http\Controllers\Author\SettingsController as AuthorSettingsController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
@@ -37,13 +38,13 @@ Auth::routes();
 
 Route::group(['middleware'=>['auth']], function (){
     Route::post('favorite/{post}/add', [FavoriteController::class, 'add'])->name('post.favorite');
-    // Route::post('comment/{post}', [CommentController::class, 'store'])->name('comment.store');
+    Route::post('comment/{post}', [CommentController::class, 'store'])->name('comment.store');
  });
 
 Route::post('subscriber', [SubscriberController::class, 'subscriber'])
     ->name('subscriber');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::group([
     'prefix' => 'admin', 'namespace' => 'Admin',
@@ -61,6 +62,9 @@ Route::group([
         ->name('password.update');
 
     Route::get('/favorite', [AdminFavoriteController::class,'index'])->name('favorite.index');
+
+    Route::get('comments',[CommentController::class,'index'])->name('comment.index');
+    Route::delete('comments/{id}',[CommentController::class,'destroy'])->name('comment.destroy');
 
     Route::prefix('/tag')->name('tag.')->group(function () {
         Route::get('/', [TagController::class, 'index'])
@@ -140,6 +144,8 @@ Route::group([
 
     Route::get('/favorite', [AuthorFavoriteController::class,'index'])->name('favorite.index');
     
+    Route::get('comments',[CommentController::class,'index'])->name('comment.index');
+    Route::delete('comments/{id}',[CommentController::class,'destroy'])->name('comment.destroy');
 
     Route::prefix('/post')->name('post.')->group(function () {
         Route::get('/', [AuthorPostController::class, 'index'])
