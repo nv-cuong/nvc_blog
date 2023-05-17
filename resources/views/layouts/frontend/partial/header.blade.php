@@ -22,10 +22,10 @@
         </ul>
         
         <div class="src-area">
-            {{-- <form method="GET" action="{{ route('search') }}">
+            <form method="GET" action="{{ route('search') }}">
                 <button class="src-btn" type="submit"><i class="ion-ios-search-strong"></i></button>
                 <input class="src-input" value="{{ isset($query) ? $query : '' }}" name="query" type="text" placeholder="Search">
-            </form> --}}
+            </form>
         </div>
 
     </div>
