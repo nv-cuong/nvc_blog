@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AuthorController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\FavoriteController as AdminFavoriteController;
@@ -42,6 +43,8 @@ Route::get('/tag/{slug}',[PostController::class, 'postByTag'])->name('tag.posts'
 
 Auth::routes();
 
+Route::get('profile/{username}',[AuthorController::class, 'profile'])->name('author.profile');
+
 Route::group(['middleware'=>['auth']], function (){
     Route::post('favorite/{post}/add', [FavoriteController::class, 'add'])->name('post.favorite');
     Route::post('comment/{post}', [CommentController::class, 'store'])->name('comment.store');
@@ -73,6 +76,9 @@ Route::group([
 
     Route::get('comments',[CommentController::class,'index'])->name('comment.index');
     Route::delete('comments/{id}',[CommentController::class,'destroy'])->name('comment.destroy');
+
+    Route::get('authors','AuthorController@index')->name('author.index');
+    Route::delete('authors/{id}','AuthorController@destroy')->name('author.destroy');
 
     Route::prefix('/tag')->name('tag.')->group(function () {
         Route::get('/', [TagController::class, 'index'])
