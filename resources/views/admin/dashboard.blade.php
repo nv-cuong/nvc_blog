@@ -121,7 +121,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- @foreach($popular_posts as $key=>$post)
+                                    @foreach($popular_posts as $key=>$post)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ str_limit($post->title,'20') }}</td>
@@ -140,7 +140,7 @@
                                                 <a class="btn btn-sm btn-primary waves-effect" target="_blank" href="{{ route('post.details',$post->slug) }}">View</a>
                                             </td>
                                         </tr>
-                                    @endforeach --}}
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -170,7 +170,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- @foreach($active_authors as $key=>$author)
+                                    @foreach($active_authors as $key=>$author)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $author->name }}</td>
@@ -178,7 +178,7 @@
                                             <td>{{ $author->comments_count }}</td>
                                             <td>{{ $author->favorite_posts_count }}</td>
                                         </tr>
-                                    @endforeach --}}
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
